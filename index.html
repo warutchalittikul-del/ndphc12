@@ -7,215 +7,179 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0e0e10;
-    --surface: #17171a;
-    --surface2: #1f1f24;
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.13);
-    --text: #f0eee8;
-    --text2: #9e9b94;
-    --text3: #5c5a56;
-    --accent: #e8e0cc;
-    --gold: #c9a84c;
-    --gold-dim: rgba(201,168,76,0.12);
-    --blue: #4a8fff;
-    --green: #3ecf6e;
-    --red: #ef4444;
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --surface2: #f5f7ff;
+    --border: rgba(99,102,241,0.12);
+    --border2: rgba(99,102,241,0.28);
+    --text: #1e1b4b;
+    --text2: #4c4a7a;
+    --text3: #8b88b8;
+    --navy: #1e3a8a;
+    --indigo: #6366f1;
+    --purple: #7c3aed;
   }
-
   html { scroll-behavior: smooth; }
-  body {
-    font-family: 'Sarabun', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE TEXTURE OVERLAY ── */
+  body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
   body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    background-size: 200px;
-    opacity: 0.4;
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(99,102,241,0.13) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(124,58,237,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(59,130,246,0.06) 0%, transparent 70%);
   }
-
-  /* ── AMBIENT GLOW ── */
-  .ambient {
-    position: fixed; width: 600px; height: 600px;
-    border-radius: 50%; pointer-events: none; z-index: 0;
-    filter: blur(120px); opacity: 0.06;
-  }
-  .ambient-1 { top: -200px; left: -100px; background: var(--gold); }
-  .ambient-2 { bottom: -200px; right: -100px; background: var(--blue); opacity: 0.04; }
-
-  /* ── LAYOUT ── */
   .wrapper { position: relative; z-index: 1; }
 
-  /* ── HEADER ── */
   header {
-    padding: 24px 40px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 10;
-    background: rgba(14,14,16,0.85);
+    padding: 18px 40px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border2); backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,0.82);
   }
   .header-brand { display: flex; align-items: center; gap: 12px; }
   .header-icon {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.25);
-    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    width: 38px; height: 38px; border-radius: 11px;
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
   }
-  .header-title { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: 0.3px; }
+  .header-title { font-size: 14px; font-weight: 700; color: var(--navy); }
   .header-sub { font-size: 11px; color: var(--text3); margin-top: 1px; font-family: 'Space Mono', monospace; }
   .header-badge {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    padding: 4px 10px; border-radius: 100px;
-    background: var(--gold-dim); color: var(--gold);
-    border: 1px solid rgba(201,168,76,0.2); letter-spacing: 0.5px;
+    font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.5px;
+    padding: 5px 12px; border-radius: 100px;
+    background: linear-gradient(135deg, #eef2ff, #ede9fe);
+    color: var(--indigo); border: 1px solid rgba(99,102,241,0.25); font-weight: 700;
   }
 
-  /* ── HERO ── */
-  .hero {
-    padding: 100px 40px 80px;
-    text-align: center; max-width: 700px; margin: 0 auto;
-  }
+  .hero { padding: 90px 40px 70px; text-align: center; max-width: 720px; margin: 0 auto; }
   .hero-eyebrow {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    letter-spacing: 3px; color: var(--gold); text-transform: uppercase;
-    margin-bottom: 24px; opacity: 0;
-    animation: fadeUp 0.6s ease 0.1s forwards;
+    display: inline-block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--indigo); font-weight: 600; background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.2); padding: 5px 14px; border-radius: 100px;
+    margin-bottom: 28px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards;
   }
   .hero-title {
-    font-size: clamp(28px, 5vw, 46px); font-weight: 800;
-    line-height: 1.2; letter-spacing: -0.5px;
-    color: var(--text); margin-bottom: 10px;
+    font-size: clamp(30px, 5vw, 50px); font-weight: 800; line-height: 1.15;
+    letter-spacing: -0.5px; color: var(--navy); margin-bottom: 14px;
     opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
   }
-  .hero-title span { color: var(--gold); }
+  .hero-title span {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
   .hero-sub-th {
-    font-size: 17px; font-weight: 400; color: var(--text2);
-    margin-bottom: 32px; line-height: 1.7;
+    font-size: 16px; color: var(--text2); margin-bottom: 36px; line-height: 1.8;
     opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards;
   }
   .hero-divider {
-    width: 40px; height: 1px; background: var(--border2);
-    margin: 0 auto 32px; opacity: 0;
-    animation: fadeUp 0.6s ease 0.35s forwards;
+    width: 48px; height: 2px; margin: 0 auto 32px;
+    background: linear-gradient(90deg, #6366f1, #7c3aed); border-radius: 2px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.35s forwards;
   }
   .hero-meta {
     display: flex; align-items: center; justify-content: center; gap: 20px;
     flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
   }
   .meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
-  .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); }
+  .meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border2); }
 
-  /* ── CARDS GRID ── */
-  .cards-section { padding: 0 40px 80px; max-width: 900px; margin: 0 auto; }
-  .section-label {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    letter-spacing: 2px; color: var(--text3); text-transform: uppercase;
-    margin-bottom: 20px;
+  .status-bar { max-width: 860px; margin: 0 auto 44px; padding: 0 40px; opacity: 0; animation: fadeUp 0.5s ease 0.5s forwards; }
+  .status-inner {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: 14px;
+    padding: 14px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    box-shadow: 0 2px 20px rgba(99,102,241,0.09);
   }
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); animation: pulse 2s ease infinite; flex-shrink: 0; }
+  .status-text { font-size: 12px; color: var(--text2); flex: 1; }
+  .status-text strong { color: var(--navy); }
+  .status-api { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--indigo); background: rgba(99,102,241,0.07); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(99,102,241,0.15); }
+
+  .cards-section { padding: 0 40px 80px; max-width: 860px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: 2px; color: var(--text3); text-transform: uppercase; font-weight: 600; margin-bottom: 18px; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
 
   .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 28px;
-    text-decoration: none; color: inherit;
-    display: flex; flex-direction: column;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    position: relative; overflow: hidden;
-    opacity: 0; animation: fadeUp 0.5s ease forwards;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 28px;
+    text-decoration: none; color: inherit; display: flex; flex-direction: column;
+    transition: all 0.22s ease; box-shadow: 0 2px 16px rgba(99,102,241,0.07);
+    opacity: 0; animation: fadeUp 0.5s ease forwards; position: relative; overflow: hidden;
   }
-  .card:nth-child(1) { animation-delay: 0.5s; }
-  .card:nth-child(2) { animation-delay: 0.6s; }
-  .card:nth-child(3) { animation-delay: 0.7s; }
-
-  .card::before {
-    content: ''; position: absolute; inset: 0; border-radius: 16px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
-  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-  .card-icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; font-size: 20px;
-  }
-  .card-icon-review { background: rgba(74,143,255,0.1); border: 1px solid rgba(74,143,255,0.2); }
-  .card-icon-dash   { background: rgba(62,207,110,0.1); border: 1px solid rgba(62,207,110,0.2); }
-  .card-icon-info   { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); }
-  .card-arrow { color: var(--text3); font-size: 18px; transition: transform 0.2s; }
-  .card:hover .card-arrow { transform: translate(3px,-3px); color: var(--text2); }
-  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+  .card:nth-child(1) { animation-delay: 0.55s; }
+  .card:nth-child(2) { animation-delay: 0.65s; }
+  .card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 18px 18px 0 0; opacity: 0; transition: opacity 0.22s; }
+  .card-review::after { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+  .card-dash::after   { background: linear-gradient(90deg, #6366f1, #7c3aed); }
+  .card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(99,102,241,0.15); }
+  .card:hover::after { opacity: 1; }
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+  .card-icon { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 21px; }
+  .card-icon-review { background: linear-gradient(135deg, #dbeafe, #ede9fe); }
+  .card-icon-dash   { background: linear-gradient(135deg, #ede9fe, #faf5ff); }
+  .card-arrow { color: var(--text3); font-size: 18px; transition: all 0.2s; }
+  .card:hover .card-arrow { transform: translate(3px,-3px); color: var(--indigo); }
+  .card-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.7; flex: 1; margin-bottom: 20px; }
   .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .card-tag {
-    font-size: 10px; padding: 3px 9px; border-radius: 100px;
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text3); font-family: 'Space Mono', monospace;
-  }
-  .card-tag-blue  { background: rgba(74,143,255,0.08);  border-color: rgba(74,143,255,0.2);  color: #7ab4ff; }
-  .card-tag-green { background: rgba(62,207,110,0.08);  border-color: rgba(62,207,110,0.2);  color: #6ee0a0; }
-  .card-tag-gold  { background: rgba(201,168,76,0.08);  border-color: rgba(201,168,76,0.2);  color: var(--gold); }
+  .card-tag { font-size: 10px; padding: 3px 10px; border-radius: 100px; font-weight: 600; }
+  .tag-blue   { background: #dbeafe; color: #1d4ed8; }
+  .tag-indigo { background: #e0e7ff; color: #4338ca; }
+  .tag-purple { background: #ede9fe; color: #6d28d9; }
 
-  /* Coming soon card */
-  .card-disabled {
-    opacity: 0.4; pointer-events: none; cursor: default;
-    animation-delay: 0.7s;
-  }
-  .card-disabled:hover { transform: none; box-shadow: none; border-color: var(--border); }
-  .tag-soon { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); color: #f87171; }
-
-  /* ── STATUS BAR ── */
-  .status-bar {
-    max-width: 900px; margin: 0 auto 40px;
-    padding: 0 40px;
-    opacity: 0; animation: fadeUp 0.5s ease 0.8s forwards;
-  }
-  .status-inner {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px 20px;
-    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s ease infinite; }
-  .status-text { font-size: 12px; color: var(--text2); flex: 1; }
-  .status-text strong { color: var(--text); }
-  .status-api {
-    font-family: 'Space Mono', monospace; font-size: 10px;
-    color: var(--text3); background: var(--surface2);
-    padding: 4px 10px; border-radius: 6px;
-    border: 1px solid var(--border); letter-spacing: 0.3px;
-  }
-
-  /* ── FOOTER ── */
   footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 40px;
+    border-top: 1px solid var(--border); padding: 24px 40px;
     display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px;
+    flex-wrap: wrap; gap: 12px; background: rgba(255,255,255,0.6);
   }
-  .footer-left { font-size: 12px; color: var(--text3); line-height: 1.7; }
-  .footer-right { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text3); }
+  .footer-left { font-size: 12px; color: var(--text3); line-height: 1.8; }
+  .footer-right { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--indigo); background: rgba(99,102,241,0.07); padding: 4px 12px; border-radius: 100px; border: 1px solid rgba(99,102,241,0.15); }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.2); } 50% { box-shadow: 0 0 0 5px rgba(34,197,94,0.08); } }
 
-  /* ── RESPONSIVE ── */
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(30,27,75,0.45); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: var(--surface); border-radius: 20px; padding: 32px 28px;
+    width: 100%; max-width: 360px; border: 1px solid var(--border2);
+    box-shadow: 0 24px 60px rgba(99,102,241,0.18);
+    transform: translateY(16px) scale(0.97); transition: transform 0.2s;
+  }
+  .modal-overlay.show .modal-box { transform: translateY(0) scale(1); }
+  .modal-icon {
+    width: 50px; height: 50px; border-radius: 14px; margin: 0 auto 16px;
+    background: linear-gradient(135deg, #ede9fe, #dbeafe);
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .modal-title { font-size: 16px; font-weight: 700; color: var(--navy); text-align: center; margin-bottom: 4px; }
+  .modal-sub { font-size: 12px; color: var(--text3); text-align: center; margin-bottom: 22px; }
+  .modal-input {
+    width: 100%; padding: 11px 14px; border-radius: 10px; font-size: 14px;
+    border: 1.5px solid var(--border2); outline: none; font-family: 'Sarabun', sans-serif;
+    color: var(--navy); background: var(--surface2); margin-bottom: 8px;
+    transition: border-color 0.15s;
+  }
+  .modal-input:focus { border-color: var(--indigo); }
+  .modal-input.error { border-color: #ef4444; background: #fff5f5; }
+  .modal-err { font-size: 12px; color: #ef4444; margin-bottom: 12px; min-height: 18px; }
+  .modal-btn {
+    width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer;
+    font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #7c3aed); color: #fff;
+    transition: opacity 0.15s; margin-bottom: 8px;
+  }
+  .modal-btn:hover { opacity: 0.88; }
+  .modal-cancel { width: 100%; padding: 9px; border: none; background: transparent; font-size: 13px; color: var(--text3); cursor: pointer; font-family: 'Sarabun', sans-serif; }
+  .modal-cancel:hover { color: var(--text2); }
+
   @media (max-width: 600px) {
-    header { padding: 16px 20px; }
+    header { padding: 14px 20px; }
     .hero { padding: 60px 20px 50px; }
     .cards-section { padding: 0 20px 60px; }
     .status-bar { padding: 0 20px; }
@@ -225,38 +189,33 @@
 </style>
 </head>
 <body>
-<div class="ambient ambient-1"></div>
-<div class="ambient ambient-2"></div>
-
 <div class="wrapper">
-  <!-- HEADER -->
+
   <header>
     <div class="header-brand">
       <div class="header-icon">🦷</div>
       <div>
         <div class="header-title">NDPHC ครั้งที่ 12</div>
-        <div class="header-sub">NDPHC-12 · 2568</div>
+        <div class="header-sub">NDPHC-12 · 2569</div>
       </div>
     </div>
     <div class="header-badge">DENTAL PUBLIC HEALTH</div>
   </header>
 
-  <!-- HERO -->
   <section class="hero">
-    <div class="hero-eyebrow">การประชุมวิชาการทันตสาธารณสุขแห่งชาติ</div>
-    <h1 class="hero-title">ระบบจัดการ<span>ผลงานวิชาการ</span></h1>
+    <div class="hero-eyebrow">การประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12</div>
+    <h1 class="hero-title">ระบบจัดการ<br><span>ผลงานวิชาการ</span></h1>
     <p class="hero-sub-th">ระบบรีวิว ติดตาม และแสดงผลการประเมินผลงาน<br>สำหรับผู้ทรงคุณวุฒิและผู้ดูแลระบบ</p>
     <div class="hero-divider"></div>
     <div class="hero-meta">
       <div class="meta-item">📍 <span>กรมอนามัย กระทรวงสาธารณสุข</span></div>
       <div class="meta-dot"></div>
-      <div class="meta-item">🗓️ <span>ปีงบประมาณ 2568</span></div>
+      <div class="meta-item">🗓️ <span>ปีงบประมาณ 2569</span></div>
       <div class="meta-dot"></div>
       <div class="meta-item">🦷 <span>สำนักทันตสาธารณสุข</span></div>
     </div>
   </section>
 
-  <!-- STATUS -->
   <div class="status-bar">
     <div class="status-inner">
       <div class="status-dot"></div>
@@ -265,13 +224,11 @@
     </div>
   </div>
 
-  <!-- CARDS -->
   <section class="cards-section">
     <div class="section-label">เข้าสู่ระบบ</div>
     <div class="cards-grid">
 
-      <!-- Card 1: Review -->
-      <a class="card" href="ndphc_review_v2.html">
+      <a class="card card-review" href="ndphc_review_v2.html">
         <div class="card-header">
           <div class="card-icon card-icon-review">📝</div>
           <div class="card-arrow">↗</div>
@@ -279,14 +236,13 @@
         <div class="card-title">ระบบรีวิวผลงาน</div>
         <div class="card-desc">สำหรับผู้ทรงคุณวุฒิ — เข้าสู่ระบบด้วยรหัสประจำตัว ให้คะแนนผลงาน Oral และ Poster Presentation พร้อมบันทึกข้อคิดเห็น</div>
         <div class="card-tags">
-          <span class="card-tag card-tag-blue">ผู้ทรงคุณวุฒิ</span>
-          <span class="card-tag card-tag-blue">Oral · Poster</span>
-          <span class="card-tag card-tag-blue">5 เกณฑ์ · 50 คะแนน</span>
+          <span class="card-tag tag-blue">ผู้ทรงคุณวุฒิ</span>
+          <span class="card-tag tag-blue">Oral · Poster</span>
+          <span class="card-tag tag-indigo">5 เกณฑ์ · 50 คะแนน</span>
         </div>
       </a>
 
-      <!-- Card 2: Dashboard -->
-      <a class="card" href="ndphc_dashboard.html">
+      <a class="card card-dash" href="#" onclick="openModal(event)">
         <div class="card-header">
           <div class="card-icon card-icon-dash">📊</div>
           <div class="card-arrow">↗</div>
@@ -294,23 +250,66 @@
         <div class="card-title">Dashboard ผลการรีวิว</div>
         <div class="card-desc">สำหรับผู้ดูแลระบบ — ดูภาพรวมคะแนน เกรด และสถานะการรีวิวของผลงานทั้งหมดแบบเรียลไทม์ พร้อมกรองและค้นหา</div>
         <div class="card-tags">
-          <span class="card-tag card-tag-green">แอดมิน</span>
-          <span class="card-tag card-tag-green">Real-time</span>
-          <span class="card-tag card-tag-green">ดูความเห็น</span>
+          <span class="card-tag tag-indigo">แอดมิน</span>
+          <span class="card-tag tag-purple">Real-time</span>
+          <span class="card-tag tag-purple">ดูความเห็น</span>
         </div>
       </a>
 
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-left">
       การประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12<br>
       สำนักทันตสาธารณสุข · กรมอนามัย · กระทรวงสาธารณสุข
     </div>
-    <div class="footer-right">NDPHC-12 · 2568</div>
+    <div class="footer-right">NDPHC-12 · 2569</div>
   </footer>
+
 </div>
+
+<!-- PASSWORD MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <div class="modal-icon">🔒</div>
+    <div class="modal-title">ยืนยันตัวตน</div>
+    <div class="modal-sub">กรุณาใส่รหัสเข้าถึง Dashboard</div>
+    <input class="modal-input" type="password" id="modal-pwd" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')checkPwd()">
+    <div class="modal-err" id="modal-err"></div>
+    <button class="modal-btn" onclick="checkPwd()">เข้าสู่ Dashboard</button>
+    <button class="modal-cancel" onclick="closeModal()">ยกเลิก</button>
+  </div>
+</div>
+
+<script>
+  function openModal(e) {
+    e.preventDefault();
+    document.getElementById('modal').classList.add('show');
+    setTimeout(() => document.getElementById('modal-pwd').focus(), 150);
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+    document.getElementById('modal-pwd').value = '';
+    document.getElementById('modal-err').textContent = '';
+    document.getElementById('modal-pwd').classList.remove('error');
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+  function checkPwd() {
+    const val = document.getElementById('modal-pwd').value;
+    const inp = document.getElementById('modal-pwd');
+    const err = document.getElementById('modal-err');
+    if (val === 'admin2026@KPP') {
+      window.location.href = 'ndphc_dashboard.html';
+    } else {
+      inp.classList.add('error');
+      err.textContent = 'รหัสไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+      inp.value = '';
+      setTimeout(() => { inp.classList.remove('error'); err.textContent = ''; }, 2500);
+    }
+  }
+</script>
 </body>
 </html>
