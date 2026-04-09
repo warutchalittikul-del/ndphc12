@@ -43,8 +43,8 @@
     display: flex; align-items: center; justify-content: center; font-size: 19px;
     box-shadow: 0 4px 12px rgba(99,102,241,0.3);
   }
-  .header-title { font-size: 14px; font-weight: 700; color: var(--navy); }
-  .header-sub { font-size: 11px; color: var(--text3); margin-top: 1px; font-family: 'Space Mono', monospace; }
+  .header-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .header-sub { font-size: 10px; color: var(--text3); margin-top: 2px; font-style: italic; }
   .header-badge {
     font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.5px;
     padding: 5px 12px; border-radius: 100px;
@@ -52,22 +52,34 @@
     color: var(--indigo); border: 1px solid rgba(99,102,241,0.25); font-weight: 700;
   }
 
-  .hero { padding: 70px 40px 60px; text-align: center; max-width: 720px; margin: 0 auto; }
-  .hero-logo-wrap { margin-bottom: 20px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; }
-  .hero-logo { max-width: 420px; width: 90%; height: auto; }
-  .hero-theme-en {
-    font-size: 15px; font-weight: 700; color: var(--indigo);
-    margin-bottom: 6px; line-height: 1.5;
-    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
-  }
-  .hero-theme-th {
-    font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.6;
-    opacity: 0; animation: fadeUp 0.6s ease 0.25s forwards;
+  .hero { padding: 90px 40px 70px; text-align: center; max-width: 720px; margin: 0 auto; }
+  .hero-eyebrow {
+    display: inline-block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--indigo); font-weight: 600; background: rgba(99,102,241,0.08);
+    border: 1px solid rgba(99,102,241,0.2); padding: 5px 14px; border-radius: 100px;
+    margin-bottom: 28px; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards;
   }
   .hero-title {
-    font-size: clamp(28px, 5vw, 46px); font-weight: 800; line-height: 1.15;
-    letter-spacing: -0.5px; color: var(--navy); margin-bottom: 12px;
+    font-size: clamp(30px, 5vw, 46px); font-weight: 800; line-height: 1.15;
+    letter-spacing: -0.5px; color: var(--navy); margin-bottom: 14px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+  .hero-title span {
+    background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub-th {
+    font-size: 16px; color: var(--text2); margin-bottom: 36px; line-height: 1.8;
     opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+  .hero-divider {
+    width: 48px; height: 2px; margin: 0 auto 32px;
+    background: linear-gradient(90deg, #6366f1, #7c3aed); border-radius: 2px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.35s forwards;
+  }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
   }
   .hero-title span {
     background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
@@ -200,22 +212,18 @@
     <div class="header-brand">
       <div class="header-icon">🦷</div>
       <div>
-        <div class="header-title">NDPHC ครั้งที่ 12</div>
-        <div class="header-sub">NDPHC-12 · 2569</div>
+        <div class="header-title">ประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12</div>
+        <div class="header-sub">24 Hours of Oral Health: Wellness from AM to PM</div>
       </div>
     </div>
-    <div class="header-badge">DENTAL PUBLIC HEALTH</div>
+    <div class="header-badge">NDPHC-12 · 2569</div>
   </header>
 
   <section class="hero">
-    <div class="hero-logo-wrap">
-      <img src="LogoNDPHC12.png" alt="NDPHC ครั้งที่ 12" class="hero-logo">
-    </div>
-    <div class="hero-theme-en">24 Hours of Oral Health: Wellness from AM to PM</div>
-    <div class="hero-theme-th">สุขภาพช่องปากตลอด 24 ชั่วโมง: ดูแลทุกช่วงวัย...ใส่ใจทุกช่วงวัน</div>
-    <div class="hero-divider"></div>
+    <div class="hero-eyebrow">การประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12</div>
     <h1 class="hero-title">ระบบจัดการ<span>ผลงานวิชาการ</span></h1>
     <p class="hero-sub-th">ระบบรีวิว ติดตาม และแสดงผลการประเมินผลงาน<br>สำหรับผู้ทรงคุณวุฒิและผู้ดูแลระบบ</p>
+    <div class="hero-divider"></div>
     <div class="hero-meta">
       <div class="meta-item">📍 <span>กรมอนามัย กระทรวงสาธารณสุข</span></div>
       <div class="meta-dot"></div>
