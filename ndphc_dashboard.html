@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard ผลการรีวิว NDPHC ครั้งที่ 12</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;font-size:14px}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+
+.topbar{background:#1a1a1a;color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-logo{font-size:22px}
+.topbar-title h1{font-size:16px;font-weight:700;margin-bottom:1px}
+.topbar-title p{font-size:11px;color:#aaa}
+.topbar-right{font-size:12px;color:#888}
+
+.controls{background:#fff;border-bottom:1px solid #e5e3dd;padding:14px 28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+.tab-group{display:flex;gap:4px}
+.tab-btn{padding:7px 18px;border-radius:8px;border:1px solid #e5e3dd;background:#f5f4f0;color:#666;font-size:13px;font-family:'Sarabun',sans-serif;cursor:pointer;font-weight:500;transition:all .15s}
+.tab-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.search-box{flex:1;min-width:180px;max-width:300px;padding:8px 12px;border:1px solid #e5e3dd;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;outline:none}
+.search-box:focus{border-color:#999}
+.filter-select{padding:8px 12px;border:1px solid #e5e3dd;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;background:#fff;outline:none;color:#555}
+.stats-row{display:flex;gap:8px;margin-left:auto}
+.stat-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600}
+.chip-total{background:#f3f2ee;color:#555}
+.chip-pass{background:#dcfce7;color:#166534}
+.chip-fail{background:#fee2e2;color:#991b1b}
+.chip-pending{background:#fef9c3;color:#854d0e}
+
+.main{padding:20px 28px}
+.loading{text-align:center;padding:60px;color:#aaa;font-size:14px}
+.empty{text-align:center;padding:60px;color:#aaa;font-size:14px}
+
+/* Table */
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid #e5e3dd;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:900px}
+thead th{background:#f8f7f3;padding:11px 14px;text-align:left;font-size:11px;font-weight:700;color:#888;letter-spacing:.3px;white-space:nowrap;border-bottom:1px solid #e5e3dd;position:sticky;top:0}
+tbody tr{border-bottom:1px solid #f0ede8;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#fafaf8}
+tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
+.td-id{font-family:'Courier New',monospace;font-size:11px;color:#888;white-space:nowrap}
+.td-title{font-weight:600;line-height:1.4;max-width:260px}
+.td-sub{font-size:11px;color:#888;margin-top:2px;line-height:1.4}
+.td-name{font-weight:500;white-space:nowrap}
+.td-org{font-size:12px;color:#666;max-width:180px;line-height:1.4}
+.score-cell{text-align:center;white-space:nowrap}
+.score-num{font-size:15px;font-weight:700}
+.score-sub{font-size:10px;color:#aaa;margin-top:1px}
+.score-dash{color:#ccc;font-size:18px}
+.grade-badge{display:inline-block;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin:0 auto}
+.grade-A{background:#dcfce7;color:#166534}
+.grade-B{background:#dbeafe;color:#1e40af}
+.grade-C{background:#ffedd5;color:#9a3412}
+.grade-empty{background:#f3f2ee;color:#bbb}
+.pass-badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:600;white-space:nowrap}
+.pass-yes{background:#dcfce7;color:#166534}
+.pass-no{background:#fee2e2;color:#991b1b}
+.pass-pending{background:#fef9c3;color:#854d0e}
+
+/* Comment modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px}
+.modal-box{background:#fff;border-radius:14px;padding:26px;width:100%;max-width:600px;max-height:80vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:12px;color:#888;margin-bottom:18px}
+.comment-block{margin-bottom:14px;padding:12px 14px;background:#f8f7f3;border-radius:9px}
+.comment-rev{font-size:11px;font-weight:700;color:#888;margin-bottom:5px}
+.comment-text{font-size:13px;line-height:1.6;color:#333}
+.comment-empty{font-size:12px;color:#bbb;font-style:italic}
+.modal-close{display:block;width:100%;padding:10px;background:#1a1a1a;color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:600;margin-top:6px;font-family:'Sarabun',sans-serif;cursor:pointer}
+.btn-comment{padding:4px 10px;background:#f3f2ee;border:1px solid #e5e3dd;border-radius:6px;font-size:11px;color:#555;cursor:pointer;font-family:'Sarabun',sans-serif;white-space:nowrap}
+.btn-comment:hover{background:#e8e5e0}
+.no-review{font-size:11px;color:#bbb;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">🦷</div>
+    <div class="topbar-title">
+      <h1>Dashboard ผลการรีวิวผลงาน</h1>
+      <p>การประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12</p>
+    </div>
+  </div>
+  <div class="topbar-right" id="last-updated"></div>
+</div>
+
+<div class="controls">
+  <div class="tab-group">
+    <button class="tab-btn active" onclick="switchTab('oral')">Oral Presentation</button>
+    <button class="tab-btn" onclick="switchTab('poster')">Poster Presentation</button>
+  </div>
+  <input class="search-box" type="text" placeholder="ค้นหาชื่อเรื่อง / ชื่อผู้นำเสนอ / สังกัด..." oninput="filterTable()">
+  <select class="filter-select" onchange="filterTable()" id="grade-filter">
+    <option value="">ทุกเกรด</option>
+    <option value="A">เกรด A</option>
+    <option value="B">เกรด B</option>
+    <option value="C">เกรด C</option>
+    <option value="-">ยังไม่มีคะแนน</option>
+  </select>
+  <select class="filter-select" onchange="filterTable()" id="pass-filter">
+    <option value="">ทั้งหมด</option>
+    <option value="ผ่าน">ผ่าน</option>
+    <option value="ไม่ผ่าน">ไม่ผ่าน</option>
+    <option value="">รอผล</option>
+  </select>
+  <div class="stats-row">
+    <span class="stat-chip chip-total" id="stat-total">ทั้งหมด 0</span>
+    <span class="stat-chip chip-pass" id="stat-pass">ผ่าน 0</span>
+    <span class="stat-chip chip-fail" id="stat-fail">ไม่ผ่าน 0</span>
+    <span class="stat-chip chip-pending" id="stat-pending">รอผล 0</span>
+  </div>
+</div>
+
+<div class="main">
+  <div id="content"><div class="loading">⏳ กำลังโหลดข้อมูล...</div></div>
+</div>
+
+<!-- Comment Modal -->
+<div id="modal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div id="modal-comments"></div>
+    <button class="modal-close" onclick="closeModal()">ปิด</button>
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbz6hFHYdA6Bmr5WE_gJtiVCfjL9kt41BClr-x8-wjRo7EsG7nkQxUM0lYoaRpPP7x2A/exec";
+
+let allData = { oral: [], poster: [] };
+let currentTab = "oral";
+
+// JSONP
+function jsonp(params) {
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Date.now() + "_" + Math.floor(Math.random() * 9999);
+    const s = document.createElement("script");
+    const timer = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 20000);
+    function cleanup() { clearTimeout(timer); delete window[cb]; if (s.parentNode) s.parentNode.removeChild(s); }
+    window[cb] = (d) => { cleanup(); resolve(d); };
+    s.onerror = () => { cleanup(); reject(new Error("เชื่อมต่อไม่ได้")); };
+    s.src = API + "?" + new URLSearchParams({ ...params, callback: cb }).toString();
+    document.head.appendChild(s);
+  });
+}
+
+async function loadData() {
+  document.getElementById("content").innerHTML = '<div class="loading">⏳ กำลังโหลดข้อมูลจาก Google Sheets...</div>';
+  try {
+    const d = await jsonp({ action: "dashboard" });
+    if (!d.ok) throw new Error(d.error);
+    allData.oral   = d.oral   || [];
+    allData.poster = d.poster || [];
+    document.getElementById("last-updated").textContent = "อัปเดต: " + new Date().toLocaleTimeString("th-TH");
+    renderTable();
+  } catch (e) {
+    document.getElementById("content").innerHTML = `<div class="loading" style="color:#e55">เกิดข้อผิดพลาด: ${e.message}</div>`;
+  }
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll(".tab-btn").forEach((b, i) => {
+    b.classList.toggle("active", (i === 0 && tab === "oral") || (i === 1 && tab === "poster"));
+  });
+  document.getElementById("grade-filter").value = "";
+  document.getElementById("pass-filter").value = "";
+  document.querySelector(".search-box").value = "";
+  renderTable();
+}
+
+function getFiltered() {
+  const q     = document.querySelector(".search-box").value.toLowerCase();
+  const grade = document.getElementById("grade-filter").value;
+  const pass  = document.getElementById("pass-filter").value;
+  return allData[currentTab].filter(p => {
+    const fullName = (p.prefix + p.fname + p.lname).toLowerCase();
+    const matchQ = !q || p.title.toLowerCase().includes(q) || fullName.includes(q) || p.org.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+    const matchG = !grade || (grade === "-" ? !p.grade : p.grade === grade);
+    const matchP = !pass  || p.pass === pass;
+    return matchQ && matchG && matchP;
+  });
+}
+
+function filterTable() { renderTable(); }
+
+function renderTable() {
+  const rows = getFiltered();
+  const all  = allData[currentTab];
+  const passCount    = all.filter(p => p.pass === "ผ่าน").length;
+  const failCount    = all.filter(p => p.pass === "ไม่ผ่าน").length;
+  const pendingCount = all.filter(p => !p.pass).length;
+
+  document.getElementById("stat-total").textContent   = "ทั้งหมด " + all.length;
+  document.getElementById("stat-pass").textContent    = "ผ่าน " + passCount;
+  document.getElementById("stat-fail").textContent    = "ไม่ผ่าน " + failCount;
+  document.getElementById("stat-pending").textContent = "รอผล " + pendingCount;
+
+  if (!rows.length) {
+    document.getElementById("content").innerHTML = '<div class="empty">ไม่พบข้อมูลที่ตรงกัน</div>';
+    return;
+  }
+
+  const tbody = rows.map((p, i) => {
+    const hasScore = p.avg !== "" && p.avg !== undefined;
+    const avg = hasScore ? (typeof p.avg === "number" ? p.avg.toFixed(1) : parseFloat(p.avg).toFixed(1)) : null;
+    const r1  = p.rev1Total !== "" && p.rev1Total !== undefined ? p.rev1Total : null;
+    const r2  = p.rev2Total !== "" && p.rev2Total !== undefined ? p.rev2Total : null;
+    const r3  = p.rev3Total !== "" && p.rev3Total !== undefined ? p.rev3Total : null;
+    const gr  = p.grade || "";
+    const passCls = p.pass === "ผ่าน" ? "pass-yes" : p.pass === "ไม่ผ่าน" ? "pass-no" : "pass-pending";
+    const passText = p.pass || "รอผล";
+    const grCls = gr ? "grade-" + gr : "grade-empty";
+    const grText = gr || "—";
+    const hasComment = p.comment1 || p.comment2 || p.comment3;
+
+    return `<tr>
+      <td class="td-id">${p.id}</td>
+      <td>
+        <div class="td-title">${p.title}</div>
+      </td>
+      <td>
+        <div class="td-name">${p.prefix}${p.fname} ${p.lname}</div>
+        <div class="td-sub">${p.pos}${p.level ? " · " + p.level : ""}</div>
+      </td>
+      <td class="td-org">${p.org}</td>
+      <td class="score-cell">
+        ${r1 !== null ? `<div class="score-num" style="font-size:13px">${r1}</div><div class="score-sub">Rev1</div>` : '<span class="score-dash">—</span>'}
+      </td>
+      <td class="score-cell">
+        ${r2 !== null ? `<div class="score-num" style="font-size:13px">${r2}</div><div class="score-sub">Rev2</div>` : '<span class="score-dash">—</span>'}
+      </td>
+      <td class="score-cell">
+        ${r3 !== null ? `<div class="score-num" style="font-size:13px">${r3}</div><div class="score-sub">Rev3</div>` : '<span class="score-dash">—</span>'}
+      </td>
+      <td class="score-cell">
+        ${avg !== null ? `<div class="score-num">${avg}</div><div class="score-sub">/50</div>` : '<span class="score-dash">—</span>'}
+      </td>
+      <td style="text-align:center"><div class="grade-badge ${grCls}">${grText}</div></td>
+      <td style="text-align:center"><span class="pass-badge ${passCls}">${passText}</span></td>
+      <td style="text-align:center">
+        ${hasComment
+          ? `<button class="btn-comment" onclick="openModal(${i})">ดูความเห็น</button>`
+          : '<span class="no-review">ยังไม่มี</span>'}
+      </td>
+    </tr>`;
+  }).join("");
+
+  document.getElementById("content").innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>รหัส</th>
+            <th>ชื่อเรื่อง</th>
+            <th>ผู้นำเสนอ</th>
+            <th>สังกัด</th>
+            <th style="text-align:center">Rev1</th>
+            <th style="text-align:center">Rev2</th>
+            <th style="text-align:center">Rev3</th>
+            <th style="text-align:center">เฉลี่ย</th>
+            <th style="text-align:center">เกรด</th>
+            <th style="text-align:center">สถานะ</th>
+            <th style="text-align:center">ความเห็น</th>
+          </tr>
+        </thead>
+        <tbody>${tbody}</tbody>
+      </table>
+    </div>`;
+
+  // Store filtered rows for modal reference
+  window._filteredRows = rows;
+}
+
+function openModal(idx) {
+  const p = window._filteredRows[idx];
+  document.getElementById("modal-title").textContent = p.title;
+  document.getElementById("modal-sub").textContent   = p.id + " · " + p.prefix + p.fname + " " + p.lname;
+  const comments = [
+    { label: "ผู้ทรงคุณวุฒิ 1", text: p.comment1 },
+    { label: "ผู้ทรงคุณวุฒิ 2", text: p.comment2 },
+    { label: "ผู้ทรงคุณวุฒิ 3", text: p.comment3 }
+  ];
+  document.getElementById("modal-comments").innerHTML = comments.map(c => `
+    <div class="comment-block">
+      <div class="comment-rev">${c.label}</div>
+      ${c.text ? `<div class="comment-text">${c.text}</div>` : '<div class="comment-empty">ยังไม่มีความเห็น</div>'}
+    </div>
+  `).join("");
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+document.getElementById("modal").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+
+loadData();
+</script>
+</body>
+</html>

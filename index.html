@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NDPHC ครั้งที่ 12 — ระบบผลงานวิชาการ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #17171a;
+    --surface2: #1f1f24;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0eee8;
+    --text2: #9e9b94;
+    --text3: #5c5a56;
+    --accent: #e8e0cc;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.12);
+    --blue: #4a8fff;
+    --green: #3ecf6e;
+    --red: #ef4444;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    background-size: 200px;
+    opacity: 0.4;
+  }
+
+  /* ── AMBIENT GLOW ── */
+  .ambient {
+    position: fixed; width: 600px; height: 600px;
+    border-radius: 50%; pointer-events: none; z-index: 0;
+    filter: blur(120px); opacity: 0.06;
+  }
+  .ambient-1 { top: -200px; left: -100px; background: var(--gold); }
+  .ambient-2 { bottom: -200px; right: -100px; background: var(--blue); opacity: 0.04; }
+
+  /* ── LAYOUT ── */
+  .wrapper { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(14,14,16,0.85);
+  }
+  .header-brand { display: flex; align-items: center; gap: 12px; }
+  .header-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.25);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+  }
+  .header-title { font-size: 13px; font-weight: 700; color: var(--text); letter-spacing: 0.3px; }
+  .header-sub { font-size: 11px; color: var(--text3); margin-top: 1px; font-family: 'Space Mono', monospace; }
+  .header-badge {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    padding: 4px 10px; border-radius: 100px;
+    background: var(--gold-dim); color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.2); letter-spacing: 0.5px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 100px 40px 80px;
+    text-align: center; max-width: 700px; margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    letter-spacing: 3px; color: var(--gold); text-transform: uppercase;
+    margin-bottom: 24px; opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+  .hero-title {
+    font-size: clamp(28px, 5vw, 46px); font-weight: 800;
+    line-height: 1.2; letter-spacing: -0.5px;
+    color: var(--text); margin-bottom: 10px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+  .hero-title span { color: var(--gold); }
+  .hero-sub-th {
+    font-size: 17px; font-weight: 400; color: var(--text2);
+    margin-bottom: 32px; line-height: 1.7;
+    opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+  .hero-divider {
+    width: 40px; height: 1px; background: var(--border2);
+    margin: 0 auto 32px; opacity: 0;
+    animation: fadeUp 0.6s ease 0.35s forwards;
+  }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+  .meta-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+  .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text3); }
+
+  /* ── CARDS GRID ── */
+  .cards-section { padding: 0 40px 80px; max-width: 900px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    letter-spacing: 2px; color: var(--text3); text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+    opacity: 0; animation: fadeUp 0.5s ease forwards;
+  }
+  .card:nth-child(1) { animation-delay: 0.5s; }
+  .card:nth-child(2) { animation-delay: 0.6s; }
+  .card:nth-child(3) { animation-delay: 0.7s; }
+
+  .card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .card:hover { border-color: var(--border2); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+  .card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .card-icon-review { background: rgba(74,143,255,0.1); border: 1px solid rgba(74,143,255,0.2); }
+  .card-icon-dash   { background: rgba(62,207,110,0.1); border: 1px solid rgba(62,207,110,0.2); }
+  .card-icon-info   { background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); }
+  .card-arrow { color: var(--text3); font-size: 18px; transition: transform 0.2s; }
+  .card:hover .card-arrow { transform: translate(3px,-3px); color: var(--text2); }
+  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .card-desc { font-size: 13px; color: var(--text2); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-tag {
+    font-size: 10px; padding: 3px 9px; border-radius: 100px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text3); font-family: 'Space Mono', monospace;
+  }
+  .card-tag-blue  { background: rgba(74,143,255,0.08);  border-color: rgba(74,143,255,0.2);  color: #7ab4ff; }
+  .card-tag-green { background: rgba(62,207,110,0.08);  border-color: rgba(62,207,110,0.2);  color: #6ee0a0; }
+  .card-tag-gold  { background: rgba(201,168,76,0.08);  border-color: rgba(201,168,76,0.2);  color: var(--gold); }
+
+  /* Coming soon card */
+  .card-disabled {
+    opacity: 0.4; pointer-events: none; cursor: default;
+    animation-delay: 0.7s;
+  }
+  .card-disabled:hover { transform: none; box-shadow: none; border-color: var(--border); }
+  .tag-soon { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); color: #f87171; }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    max-width: 900px; margin: 0 auto 40px;
+    padding: 0 40px;
+    opacity: 0; animation: fadeUp 0.5s ease 0.8s forwards;
+  }
+  .status-inner {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s ease infinite; }
+  .status-text { font-size: 12px; color: var(--text2); flex: 1; }
+  .status-text strong { color: var(--text); }
+  .status-api {
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    color: var(--text3); background: var(--surface2);
+    padding: 4px 10px; border-radius: 6px;
+    border: 1px solid var(--border); letter-spacing: 0.3px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-left { font-size: 12px; color: var(--text3); line-height: 1.7; }
+  .footer-right { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .hero { padding: 60px 20px 50px; }
+    .cards-section { padding: 0 20px 60px; }
+    .status-bar { padding: 0 20px; }
+    footer { padding: 20px; }
+    .header-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<div class="wrapper">
+  <!-- HEADER -->
+  <header>
+    <div class="header-brand">
+      <div class="header-icon">🦷</div>
+      <div>
+        <div class="header-title">NDPHC ครั้งที่ 12</div>
+        <div class="header-sub">NDPHC-12 · 2568</div>
+      </div>
+    </div>
+    <div class="header-badge">DENTAL PUBLIC HEALTH</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">การประชุมวิชาการทันตสาธารณสุขแห่งชาติ</div>
+    <h1 class="hero-title">ระบบจัดการ<span>ผลงานวิชาการ</span></h1>
+    <p class="hero-sub-th">ระบบรีวิว ติดตาม และแสดงผลการประเมินผลงาน<br>สำหรับผู้ทรงคุณวุฒิและผู้ดูแลระบบ</p>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <div class="meta-item">📍 <span>กรมอนามัย กระทรวงสาธารณสุข</span></div>
+      <div class="meta-dot"></div>
+      <div class="meta-item">🗓️ <span>ปีงบประมาณ 2568</span></div>
+      <div class="meta-dot"></div>
+      <div class="meta-item">🦷 <span>สำนักทันตสาธารณสุข</span></div>
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <div class="status-inner">
+      <div class="status-dot"></div>
+      <div class="status-text">ระบบเชื่อมต่อ <strong>Google Sheets</strong> ผ่าน Apps Script · พร้อมใช้งาน</div>
+      <div class="status-api">API · JSONP · Google Drive</div>
+    </div>
+  </div>
+
+  <!-- CARDS -->
+  <section class="cards-section">
+    <div class="section-label">เข้าสู่ระบบ</div>
+    <div class="cards-grid">
+
+      <!-- Card 1: Review -->
+      <a class="card" href="ndphc_review_v2.html">
+        <div class="card-header">
+          <div class="card-icon card-icon-review">📝</div>
+          <div class="card-arrow">↗</div>
+        </div>
+        <div class="card-title">ระบบรีวิวผลงาน</div>
+        <div class="card-desc">สำหรับผู้ทรงคุณวุฒิ — เข้าสู่ระบบด้วยรหัสประจำตัว ให้คะแนนผลงาน Oral และ Poster Presentation พร้อมบันทึกข้อคิดเห็น</div>
+        <div class="card-tags">
+          <span class="card-tag card-tag-blue">ผู้ทรงคุณวุฒิ</span>
+          <span class="card-tag card-tag-blue">Oral · Poster</span>
+          <span class="card-tag card-tag-blue">5 เกณฑ์ · 50 คะแนน</span>
+        </div>
+      </a>
+
+      <!-- Card 2: Dashboard -->
+      <a class="card" href="ndphc_dashboard.html">
+        <div class="card-header">
+          <div class="card-icon card-icon-dash">📊</div>
+          <div class="card-arrow">↗</div>
+        </div>
+        <div class="card-title">Dashboard ผลการรีวิว</div>
+        <div class="card-desc">สำหรับผู้ดูแลระบบ — ดูภาพรวมคะแนน เกรด และสถานะการรีวิวของผลงานทั้งหมดแบบเรียลไทม์ พร้อมกรองและค้นหา</div>
+        <div class="card-tags">
+          <span class="card-tag card-tag-green">แอดมิน</span>
+          <span class="card-tag card-tag-green">Real-time</span>
+          <span class="card-tag card-tag-green">ดูความเห็น</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      การประชุมวิชาการทันตสาธารณสุขแห่งชาติ ครั้งที่ 12<br>
+      สำนักทันตสาธารณสุข · กรมอนามัย · กระทรวงสาธารณสุข
+    </div>
+    <div class="footer-right">NDPHC-12 · 2568</div>
+  </footer>
+</div>
+</body>
+</html>
