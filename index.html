@@ -245,7 +245,7 @@
     <div class="section-label">เข้าสู่ระบบ</div>
     <div class="cards-grid">
 
-      <a class="card card-review" href="ndphc_review_v2.html">
+      <a class="card card-review" href="ndphc_review_v2.html" target="_blank">
         <div class="card-header">
           <div class="card-icon card-icon-review">📝</div>
           <div class="card-arrow">↗</div>
@@ -259,7 +259,7 @@
         </div>
       </a>
 
-      <a class="card card-dash" href="#" onclick="openModal(event)">
+      <a class="card card-dash" href="#" onclick="openModal(event)" target="_self">
         <div class="card-header">
           <div class="card-icon card-icon-dash">📊</div>
           <div class="card-arrow">↗</div>
@@ -319,7 +319,7 @@
     const inp = document.getElementById('modal-pwd');
     const err = document.getElementById('modal-err');
     if (val === 'admin2026@KPP') {
-      window.location.href = 'ndphc_dashboard.html';
+      window.open('ndphc_dashboard.html', '_blank');
     } else {
       inp.classList.add('error');
       err.textContent = 'รหัสไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
