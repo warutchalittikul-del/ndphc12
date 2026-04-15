@@ -34,7 +34,7 @@ a{color:#1a6fbf;text-decoration:none}
 .error-msg{margin-top:8px;padding:8px 10px;background:#fee2e2;border-radius:7px;font-size:12px;color:#991b1b}
 
 /* ── List ── */
-#list-screen{display:none;flex-direction:column;min-height:100vh}
+#list-screen{display:none;flex-direction:column;min-height:100vh;background:#f5f4f0}
 .top-bar{background:#fff;border-bottom:1px solid #e5e3dd;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
 .top-bar-left{display:flex;align-items:center;gap:10px}
 .top-logo{width:32px;height:32px;background:#e8f0fb;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -52,22 +52,32 @@ a{color:#1a6fbf;text-decoration:none}
 .badge-B{background:#dbeafe;color:#1e40af}
 .badge-C{background:#ffedd5;color:#9a3412}
 .btn-outline{font-size:12px;color:#888;background:transparent;border:1px solid #ddd;border-radius:7px;padding:5px 10px}
-.list-body{max-width:660px;margin:0 auto;padding:24px 20px;flex:1}
-.list-heading{margin-bottom:18px}
-.list-heading h2{font-size:16px;font-weight:700;margin-bottom:3px}
-.list-heading p{font-size:12px;color:#888}
-.paper-card{background:#fff;border:1px solid #e5e3dd;border-radius:11px;padding:14px 16px;margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:13px;transition:border-color .15s,box-shadow .15s}
-.paper-card:hover{border-color:#bbb;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.paper-card.done{border:1.5px solid #86efac}
-.paper-num{width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+
+/* ── LIST TOOLBAR ── */
+.list-toolbar{background:#fff;border-bottom:1px solid #e5e3dd;padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:49px;z-index:9}
+.search-input{flex:1;min-width:160px;max-width:320px;padding:7px 12px 7px 32px;border:1px solid #e5e3dd;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;outline:none;background:#f8f7f3 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center;transition:border-color .15s}
+.search-input:focus{border-color:#999;background-color:#fff}
+.filter-btn{font-size:12px;padding:6px 12px;border-radius:7px;border:1px solid #e5e3dd;background:#f8f7f3;color:#666;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .15s;white-space:nowrap}
+.filter-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.list-count{font-size:12px;color:#aaa;margin-left:auto;white-space:nowrap}
+
+/* ── GRID ── */
+.list-body{max-width:900px;margin:0 auto;padding:20px;flex:1;width:100%}
+.paper-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.paper-card{background:#fff;border:1px solid #e5e3dd;border-radius:12px;padding:14px 15px;cursor:pointer;display:flex;flex-direction:column;gap:0;transition:border-color .15s,box-shadow .15s,transform .15s}
+.paper-card:hover{border-color:#bbb;box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.paper-card.done{border:1.5px solid #86efac;background:#fafffe}
+.paper-card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.paper-num{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 .num-done{background:#dcfce7;color:#166534}
 .num-prog{background:#fef9c3;color:#854d0e}
 .num-wait{background:#f3f2ee;color:#888}
+.paper-id{font-size:10px;color:#aaa;margin-bottom:3px}
+.paper-title{font-size:12px;font-weight:600;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;color:#1a1a1a}
 .paper-info{flex:1;min-width:0}
-.paper-id{font-size:10px;color:#aaa;margin-bottom:2px}
-.paper-title{font-size:13px;font-weight:600;line-height:1.45;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.paper-tags{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
-.paper-arrow{color:#bbb;font-size:20px;flex-shrink:0}
+.paper-tags{display:flex;gap:5px;flex-wrap:wrap}
+.paper-arrow{display:none}
+.empty-state{text-align:center;padding:60px 20px;color:#aaa;font-size:13px;grid-column:1/-1}
 
 /* ── Review ── */
 #review-screen{display:none;flex-direction:column;height:100vh;overflow:hidden}
@@ -187,6 +197,7 @@ a{color:#1a6fbf;text-decoration:none}
 <div id="list-screen">
   <div class="top-bar">
     <div class="top-bar-left">
+      <a href="index.html" style="font-size:13px;color:#888;text-decoration:none;background:#f3f2ee;border:1px solid #e5e3dd;border-radius:7px;padding:5px 10px;margin-right:4px;white-space:nowrap;">← หน้าหลัก</a>
       <div class="top-logo">🦷</div>
       <span class="top-title">ระบบรีวิวผลงาน</span>
       <span id="type-badge" class="badge"></span>
@@ -196,12 +207,19 @@ a{color:#1a6fbf;text-decoration:none}
       <button class="btn-outline" onclick="doLogout()">ออกจากระบบ</button>
     </div>
   </div>
+
+  <!-- TOOLBAR -->
+  <div class="list-toolbar">
+    <input class="search-input" type="text" id="search-input" placeholder="ค้นหาชื่อเรื่อง หรือ รหัส..." oninput="renderList()">
+    <button class="filter-btn active" id="filter-all"   onclick="setFilter('all')">ทั้งหมด</button>
+    <button class="filter-btn"        id="filter-wait"  onclick="setFilter('wait')">รอรีวิว</button>
+    <button class="filter-btn"        id="filter-prog"  onclick="setFilter('prog')">กำลังรีวิว</button>
+    <button class="filter-btn"        id="filter-done"  onclick="setFilter('done')">เสร็จแล้ว</button>
+    <span class="list-count" id="list-count"></span>
+  </div>
+
   <div class="list-body">
-    <div class="list-heading">
-      <h2>ผลงานที่ต้องรีวิว</h2>
-      <p id="list-summary"></p>
-    </div>
-    <div id="paper-list"></div>
+    <div id="paper-list" class="paper-grid"></div>
   </div>
 </div>
 
@@ -313,7 +331,7 @@ a{color:#1a6fbf;text-decoration:none}
 // ══════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════
-const API = "https://script.google.com/macros/s/AKfycbz6hFHYdA6Bmr5WE_gJtiVCfjL9kt41BClr-x8-wjRo7EsG7nkQxUM0lYoaRpPP7x2A/exec";
+const API = "https://script.google.com/macros/s/AKfycbxl4FdekJJZ2BdWNL8AWEt9XnGt4_yMEkaEYS3RfzSn6sNtfPVPCRrEd6cCKUt0bHLcPQ/exec";
 
 // ══════════════════════════════════════
 //  CRITERIA & COLORS
@@ -431,37 +449,65 @@ function doLogout(){
 // ══════════════════════════════════════
 //  LIST
 // ══════════════════════════════════════
+let currentFilter = 'all';
+function setFilter(f) {
+  currentFilter = f;
+  ['all','wait','prog','done'].forEach(k => {
+    document.getElementById('filter-'+k).classList.toggle('active', k===f);
+  });
+  renderList();
+}
+
 function renderList(){
   const isOral=reviewer.type==="oral";
   const tb=document.getElementById("type-badge");
   tb.textContent=isOral?"Oral Presentation":"Poster Presentation";
   tb.className="badge "+(isOral?"badge-oral":"badge-poster");
   document.getElementById("reviewer-name").textContent=reviewer.name;
-  const done=papers.filter(p=>reviews[p.key]?.submitted).length;
-  document.getElementById("list-summary").textContent=done+" / "+papers.length+" รายการ รีวิวแล้ว";
+
+  const q=(document.getElementById('search-input')?.value||'').toLowerCase();
 
   const list=document.getElementById("paper-list");
   list.innerHTML="";
-  if(!papers.length){
-    list.innerHTML='<div style="text-align:center;padding:40px;color:#aaa;font-size:13px">ไม่พบผลงานในระบบ</div>';
+
+  const filtered = papers.filter((p,i)=>{
+    const rv=reviews[p.key];
+    const submitted=rv?.submitted;
+    const inProg=rv&&!submitted&&Object.values(rv.scores||{}).some(v=>v!==null);
+    const matchQ = !q || p.title.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+    const matchF = currentFilter==='all' ||
+      (currentFilter==='done' && submitted) ||
+      (currentFilter==='prog' && inProg) ||
+      (currentFilter==='wait' && !submitted && !inProg);
+    return matchQ && matchF;
+  });
+
+  const done=papers.filter(p=>reviews[p.key]?.submitted).length;
+  document.getElementById("list-count").textContent=
+    `แสดง ${filtered.length} / ${papers.length} รายการ · รีวิวแล้ว ${done}`;
+
+  if(!filtered.length){
+    list.innerHTML='<div class="empty-state">🔍 ไม่พบผลงานที่ตรงกัน</div>';
     return;
   }
-  papers.forEach((p,i)=>{
+
+  filtered.forEach((p,i)=>{
     const rv=reviews[p.key],submitted=rv?.submitted,inProg=rv&&!submitted&&Object.values(rv.scores||{}).some(v=>v!==null);
     const t=submitted?Object.values(rv.scores).reduce((s,v)=>s+(v||0),0):0;
     const g=submitted?grade(t):null;
     const hasAI=p.ai&&p.ai!=="ไม่ใช้ AI"&&p.ai!=="—"&&p.ai!=="";
+    const origIdx = papers.indexOf(p);
 
     const card=document.createElement("div");
     card.className="paper-card"+(submitted?" done":"");
     card.onclick=()=>openPaper(p);
 
-    const num=document.createElement("div");
-    num.className="paper-num "+(submitted?"num-done":inProg?"num-prog":"num-wait");
-    num.textContent=submitted?"✓":String(i+1).padStart(2,"0");
+    const numEl=document.createElement("div");
+    numEl.className="paper-num "+(submitted?"num-done":inProg?"num-prog":"num-wait");
+    numEl.textContent=submitted?"✓":String(origIdx+1).padStart(2,"0");
 
     const info=document.createElement("div");info.className="paper-info";
-    info.innerHTML=`<div class="paper-id">${p.id}</div><div class="paper-title">${p.title}</div>`;
+
     const tags=document.createElement("div");tags.className="paper-tags";
     if(submitted)tags.innerHTML+=`<span class="badge badge-${g.g}">เกรด ${g.g} · ${t}/50</span>`;
     else if(inProg)tags.innerHTML+=`<span class="badge badge-warn">กำลังรีวิว</span>`;
@@ -470,10 +516,13 @@ function renderList(){
     if(rv?.coi==="yes")tags.innerHTML+=`<span class="badge badge-danger">COI</span>`;
     if(p.ec&&p.ec.startsWith("http"))tags.innerHTML+=`<span class="badge badge-info">📎 EC</span>`;
     if(hasAI)tags.innerHTML+=`<span class="badge badge-warn">ใช้ AI</span>`;
-    info.appendChild(tags);
 
-    const arr=document.createElement("div");arr.className="paper-arrow";arr.textContent=submitted?"✏️":"›";
-    card.appendChild(num);card.appendChild(info);card.appendChild(arr);
+    const top=document.createElement("div");top.className="paper-card-top";
+    top.appendChild(numEl);
+    info.innerHTML=`<div class="paper-id">${p.id}</div><div class="paper-title">${p.title}</div>`;
+    info.appendChild(tags);
+    top.appendChild(info);
+    card.appendChild(top);
     list.appendChild(card);
   });
 }
