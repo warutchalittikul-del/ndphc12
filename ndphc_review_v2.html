@@ -329,7 +329,7 @@ a{color:#1a6fbf;text-decoration:none}
 // ══════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════
-const API = "https://script.google.com/macros/s/AKfycbxKUbZqp_iHiq6EondJ_VzA0gifFkULcfjDVMUFdQtWLjCY72FvVBtC5qr_Fi-HF05d/exec";
+const API = "https://script.google.com/macros/s/AKfycbymU_cBfXEzGhKa1g4aFnpw86O4LXhVGpJ2ntZwm6IieepRwSZkUy-x8MVxvyQqeScZ/exec";
 
 // ══════════════════════════════════════
 //  CRITERIA & COLORS
@@ -424,7 +424,9 @@ async function doLogin(){
     reviewer=d.reviewer;
     const p=await jsonp({action:"papers",code});
     papers=p.ok?p.papers:[];
-    reviews={};
+    // ดึงข้อมูลที่เคยรีวิวแล้วจาก Sheets
+    const r=await jsonp({action:"getReviews",code});
+    reviews=r.ok?r.reviews:{};
     renderList();
     showScreen("list-screen");
   }catch(e){
