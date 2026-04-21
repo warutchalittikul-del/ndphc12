@@ -722,14 +722,22 @@ function updateSummary(){
 //  NAVIGATION
 // ══════════════════════════════════════
 function goBack(){
+  if(!reviewer){showScreen("login-screen");return;}
   renderList();
   showScreen("list-screen");
 }
 
 function goToList(){
+  if(!reviewer){showScreen("login-screen");return;}
   renderList();
   showScreen("list-screen");
 }
+
+// ป้องกันกด Back browser แล้วข้อมูลหาย
+window.addEventListener("popstate", function(){
+  if(!reviewer) showScreen("login-screen");
+});
+history.pushState(null, "", location.href);
 
 function editCurrentPaper(){
   openPaper(currentPaper);
