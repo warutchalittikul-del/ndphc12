@@ -187,8 +187,6 @@ a{color:#1a6fbf;text-decoration:none}
       <input id="login-input" type="text" placeholder="เช่น ORAL-R1 หรือ POST-R1">
       <div id="login-error" class="error-msg hidden"></div>
       <button class="btn-primary" id="login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-      <button class="btn-ghost" onclick="toggleDemo()">▼ รหัสตัวอย่าง</button>
-      <div id="demo-box" class="demo-box hidden"><b>Oral:</b> ORAL-R1 · ORAL-R2 · ORAL-R3<br><b>Poster:</b> POST-R1 · POST-R2 · POST-R3</div>
     </div>
   </div>
 </div>
@@ -331,7 +329,7 @@ a{color:#1a6fbf;text-decoration:none}
 // ══════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════
-const API = "https://script.google.com/macros/s/AKfycbwHHUNN4LxuSh9Qa9HW7ffs9HXpzovgbCNpSwOlMJC8TIJR2-WXbkmuJBbrE0iCzVX5/exec";
+const API = "https://script.google.com/macros/s/AKfycbxKUbZqp_iHiq6EondJ_VzA0gifFkULcfjDVMUFdQtWLjCY72FvVBtC5qr_Fi-HF05d/exec";
 
 // ══════════════════════════════════════
 //  CRITERIA & COLORS
@@ -562,7 +560,7 @@ function openPaper(paper){
   // Info box
   const ecEl=document.getElementById("ec-val");
   if(paper.ec&&paper.ec.startsWith("http")){
-    ecEl.innerHTML=`<a href="${paper.ec}" target="_blank">📎 มีไฟล์แนบ — คลิกเปิด</a>`;
+    ecEl.innerHTML=`<span class="badge badge-info">📎 มีไฟล์แนบ</span>`;
   }else{
     ecEl.textContent="ไม่มีไฟล์ EC";ecEl.style.color="#aaa";
   }
