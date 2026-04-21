@@ -426,7 +426,21 @@ async function doLogin(){
     papers=p.ok?p.papers:[];
     // ดึงข้อมูลที่เคยรีวิวแล้วจาก Sheets
     const r=await jsonp({action:"getReviews",code});
-    reviews=r.ok?r.reviews:{};
+    if(r.ok && r.reviews){
+      // ทำให้ scores เป็น Number เสมอ ป้องกัน string ปนมา
+      reviews={};
+      Object.keys(r.reviews).forEach(key=>{
+        const rv=r.reviews[key];
+        const safeScores={};
+        Object.keys(rv.scores||{}).forEach(k=>{
+          const v=Number(rv.scores[k]);
+          safeScores[k]=(isNaN(v)||v===0)?null:v;
+        });
+        reviews[key]={...rv,scores:safeScores};
+      });
+    }else{
+      reviews={};
+    }
     renderList();
     showScreen("list-screen");
   }catch(e){
