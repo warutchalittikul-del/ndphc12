@@ -81,7 +81,6 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
 
 <div class="topbar">
   <div class="topbar-left">
-    <a href="index.html" style="font-size:12px;color:#aaa;text-decoration:none;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:5px 10px;white-space:nowrap;">← หน้าหลัก</a>
     <div class="topbar-logo">🦷</div>
     <div class="topbar-title">
       <h1>Dashboard ผลการรีวิวผลงาน</h1>
@@ -108,7 +107,20 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
     <option value="">ทั้งหมด</option>
     <option value="ผ่าน">ผ่าน</option>
     <option value="ไม่ผ่าน">ไม่ผ่าน</option>
-    <option value="">รอผล</option>
+    <option value="รอผล">รอผล</option>
+  </select>
+  <select class="filter-select" onchange="filterTable()" id="c-filter">
+    <option value="">ทุกกรณี</option>
+    <option value="any-c">มี Rev ให้ C อย่างน้อย 1 คน</option>
+    <option value="all-c">ทุก Rev ให้ C</option>
+  </select>
+  <select class="filter-select" onchange="sortTable(this.value)" id="sort-select">
+    <option value="">เรียงตาม: ค่าเริ่มต้น</option>
+    <option value="avg-desc">เฉลี่ย: มาก → น้อย</option>
+    <option value="avg-asc">เฉลี่ย: น้อย → มาก</option>
+    <option value="r1-desc">Rev1: มาก → น้อย</option>
+    <option value="r2-desc">Rev2: มาก → น้อย</option>
+    <option value="r3-desc">Rev3: มาก → น้อย</option>
   </select>
   <div class="stats-row">
     <span class="stat-chip chip-total" id="stat-total">ทั้งหมด 0</span>
@@ -137,6 +149,21 @@ const API = "https://script.google.com/macros/s/AKfycbxqVNUsUa_vpobc-xAm7UWaimlL
 
 let allData = { oral: [], poster: [] };
 let currentTab = "oral";
+let currentSort = "";
+
+function gradeOf(total) {
+  if (!total && total !== 0) return "";
+  const n = parseFloat(total);
+  if (isNaN(n)) return "";
+  if (n >= 40) return "A";
+  if (n >= 30) return "B";
+  return "C";
+}
+
+function sortTable(val) {
+  currentSort = val;
+  renderTable();
+}
 
 // JSONP
 function jsonp(params) {
@@ -173,21 +200,48 @@ function switchTab(tab) {
   });
   document.getElementById("grade-filter").value = "";
   document.getElementById("pass-filter").value = "";
+  document.getElementById("c-filter").value = "";
+  document.getElementById("sort-select").value = "";
   document.querySelector(".search-box").value = "";
+  currentSort = "";
   renderTable();
 }
 
 function getFiltered() {
-  const q     = document.querySelector(".search-box").value.toLowerCase();
-  const grade = document.getElementById("grade-filter").value;
-  const pass  = document.getElementById("pass-filter").value;
-  return allData[currentTab].filter(p => {
+  const q      = document.querySelector(".search-box").value.toLowerCase();
+  const grade  = document.getElementById("grade-filter").value;
+  const pass   = document.getElementById("pass-filter").value;
+  const cFilt  = document.getElementById("c-filter").value;
+  const sort   = currentSort;
+
+  let rows = allData[currentTab].filter(p => {
     const fullName = (p.prefix + p.fname + p.lname).toLowerCase();
     const matchQ = !q || p.title.toLowerCase().includes(q) || fullName.includes(q) || p.org.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
     const matchG = !grade || (grade === "-" ? !p.grade : p.grade === grade);
-    const matchP = !pass  || p.pass === pass;
-    return matchQ && matchG && matchP;
+    const matchP = !pass || p.pass === pass;
+
+    // Filter: มี Rev ให้ C
+    let matchC = true;
+    if (cFilt) {
+      const g1 = gradeOf(p.rev1Total), g2 = gradeOf(p.rev2Total), g3 = gradeOf(p.rev3Total);
+      const grades = [g1, g2, g3].filter(g => g !== "");
+      if (cFilt === "any-c") matchC = grades.some(g => g === "C");
+      if (cFilt === "all-c") matchC = grades.length > 0 && grades.every(g => g === "C");
+    }
+    return matchQ && matchG && matchP && matchC;
   });
+
+  // Sort
+  if (sort) {
+    const [field, dir] = sort.split("-");
+    const mul = dir === "desc" ? -1 : 1;
+    rows = rows.sort((a, b) => {
+      const va = parseFloat(field === "avg" ? a.avg : field === "r1" ? a.rev1Total : field === "r2" ? a.rev2Total : a.rev3Total) || 0;
+      const vb = parseFloat(field === "avg" ? b.avg : field === "r1" ? b.rev1Total : field === "r2" ? b.rev2Total : b.rev3Total) || 0;
+      return mul * (vb - va);
+    });
+  }
+  return rows;
 }
 
 function filterTable() { renderTable(); }
