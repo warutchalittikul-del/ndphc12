@@ -24,7 +24,9 @@ body{font-family:'Sarabun',sans-serif;background:#f5f4f0;color:#1a1a1a;font-size
 .search-box{flex:1;min-width:180px;max-width:300px;padding:8px 12px;border:1px solid #e5e3dd;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;outline:none}
 .search-box:focus{border-color:#999}
 .filter-select{padding:8px 12px;border:1px solid #e5e3dd;border-radius:8px;font-size:13px;font-family:'Sarabun',sans-serif;background:#fff;outline:none;color:#555}
-.stats-row{display:flex;gap:8px;margin-left:auto}
+.toggle-btn{padding:7px 14px;border-radius:8px;border:1px solid #e5e3dd;background:#f5f4f0;color:#555;font-size:13px;font-family:'Sarabun',sans-serif;cursor:pointer;font-weight:500;transition:all .15s;white-space:nowrap}
+.toggle-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.hidden-cell{filter:blur(5px);user-select:none;pointer-events:none;transition:filter .2s}
 .stat-chip{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600}
 .chip-total{background:#f3f2ee;color:#555}
 .chip-pass{background:#dcfce7;color:#166534}
@@ -122,7 +124,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
     <option value="r2-desc">Rev2: มาก → น้อย</option>
     <option value="r3-desc">Rev3: มาก → น้อย</option>
   </select>
-  <div class="stats-row">
+  <button class="toggle-btn" id="hide-btn" onclick="toggleHide()">👁 ซ่อนชื่อ/สังกัด</button>
     <span class="stat-chip chip-total" id="stat-total">ทั้งหมด 0</span>
     <span class="stat-chip chip-pass" id="stat-pass">ผ่าน 0</span>
     <span class="stat-chip chip-fail" id="stat-fail">ไม่ผ่าน 0</span>
@@ -147,7 +149,15 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxqVNUsUa_vpobc-xAm7UWaimlL9jNbEQibcxzjBAMU7k5ku2_1_T6fKi8ryXzosJbI/exec";
 
-let allData = { oral: [], poster: [] };
+let hideMode = false;
+function toggleHide() {
+  hideMode = !hideMode;
+  document.getElementById('hide-btn').classList.toggle('active', hideMode);
+  document.getElementById('hide-btn').textContent = hideMode ? '👁 แสดงชื่อ/สังกัด' : '👁 ซ่อนชื่อ/สังกัด';
+  document.querySelectorAll('.hideable').forEach(el => {
+    el.classList.toggle('hidden-cell', hideMode);
+  });
+}
 let currentTab = "oral";
 let currentSort = "";
 
@@ -238,7 +248,7 @@ function getFiltered() {
     rows = rows.sort((a, b) => {
       const va = parseFloat(field === "avg" ? a.avg : field === "r1" ? a.rev1Total : field === "r2" ? a.rev2Total : a.rev3Total) || 0;
       const vb = parseFloat(field === "avg" ? b.avg : field === "r1" ? b.rev1Total : field === "r2" ? b.rev2Total : b.rev3Total) || 0;
-      return mul * (vb - va);
+      return mul * (va - vb);
     });
   }
   return rows;
@@ -277,15 +287,16 @@ function renderTable() {
     const hasComment = p.comment1 || p.comment2 || p.comment3;
 
     return `<tr>
+      <td style="text-align:center;color:#bbb;font-size:12px;font-family:'Courier New',monospace">${i+1}</td>
       <td class="td-id">${p.id}</td>
       <td>
         <div class="td-title">${p.title}</div>
       </td>
-      <td>
+      <td class="hideable">
         <div class="td-name">${p.prefix}${p.fname} ${p.lname}</div>
         <div class="td-sub">${p.pos}${p.level ? " · " + p.level : ""}</div>
       </td>
-      <td class="td-org">${p.org}</td>
+      <td class="td-org hideable">${p.org}</td>
       <td class="score-cell">
         ${r1 !== null ? `<div class="score-num" style="font-size:13px">${r1}</div><div class="score-sub">Rev1</div>` : '<span class="score-dash">—</span>'}
       </td>
@@ -313,6 +324,7 @@ function renderTable() {
       <table>
         <thead>
           <tr>
+            <th style="text-align:center;width:40px">#</th>
             <th>รหัส</th>
             <th>ชื่อเรื่อง</th>
             <th>ผู้นำเสนอ</th>
@@ -329,6 +341,11 @@ function renderTable() {
         <tbody>${tbody}</tbody>
       </table>
     </div>`;
+
+  // Re-apply hide state after render
+  if (hideMode) {
+    document.querySelectorAll('.hideable').forEach(el => el.classList.add('hidden-cell'));
+  }
 
   // Store filtered rows for modal reference
   window._filteredRows = rows;
