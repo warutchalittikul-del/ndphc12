@@ -105,6 +105,13 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
     <option value="C">เกรด C</option>
     <option value="-">ยังไม่มีคะแนน</option>
   </select>
+  <select class="filter-select" onchange="filterTable()" id="type-filter">
+    <option value="">ทุกประเภท</option>
+    <option value="RS">RS</option>
+    <option value="R2R">R2R</option>
+    <option value="BP">BP</option>
+    <option value="INNO">INNO</option>
+  </select>
   <select class="filter-select" onchange="filterTable()" id="pass-filter">
     <option value="">ทั้งหมด</option>
     <option value="ผ่าน">ผ่าน</option>
@@ -213,6 +220,7 @@ function switchTab(tab) {
   document.getElementById("grade-filter").value = "";
   document.getElementById("pass-filter").value = "";
   document.getElementById("c-filter").value = "";
+  document.getElementById("type-filter").value = "";
   document.getElementById("sort-select").value = "";
   document.querySelector(".search-box").value = "";
   currentSort = "";
@@ -224,6 +232,7 @@ function getFiltered() {
   const grade  = document.getElementById("grade-filter").value;
   const pass   = document.getElementById("pass-filter").value;
   const cFilt  = document.getElementById("c-filter").value;
+  const typeF  = document.getElementById("type-filter").value;
   const sort   = currentSort;
 
   let rows = allData[currentTab].filter(p => {
@@ -231,6 +240,7 @@ function getFiltered() {
     const matchQ = !q || p.title.toLowerCase().includes(q) || fullName.includes(q) || p.org.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
     const matchG = !grade || (grade === "-" ? !p.grade : p.grade === grade);
     const matchP = !pass || p.pass === pass;
+    const matchT = !typeF || p.id.includes(`[${typeF}]`);
 
     // Filter: มี Rev ให้ C
     let matchC = true;
@@ -240,7 +250,7 @@ function getFiltered() {
       if (cFilt === "any-c") matchC = grades.some(g => g === "C");
       if (cFilt === "all-c") matchC = grades.length > 0 && grades.every(g => g === "C");
     }
-    return matchQ && matchG && matchP && matchC;
+    return matchQ && matchG && matchP && matchC && matchT;
   });
 
   // Sort
