@@ -122,6 +122,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
     <option value="">ทุกกรณี</option>
     <option value="any-c">มี Rev ให้ C อย่างน้อย 1 คน</option>
     <option value="all-c">ทุก Rev ให้ C</option>
+    <option value="no-c">ไม่มี Rev ให้ C เลย</option>
   </select>
   <select class="filter-select" onchange="sortTable(this.value)" id="sort-select">
     <option value="">เรียงตาม: ค่าเริ่มต้น</option>
@@ -249,6 +250,7 @@ function getFiltered() {
       const grades = [g1, g2, g3].filter(g => g !== "");
       if (cFilt === "any-c") matchC = grades.some(g => g === "C");
       if (cFilt === "all-c") matchC = grades.length > 0 && grades.every(g => g === "C");
+      if (cFilt === "no-c")  matchC = grades.length > 0 && grades.every(g => g !== "C");
     }
     return matchQ && matchG && matchP && matchC && matchT;
   });
