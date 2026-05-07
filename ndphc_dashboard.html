@@ -133,6 +133,7 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
     <option value="r3-desc">Rev3: มาก → น้อย</option>
   </select>
   <button class="toggle-btn" id="hide-btn" onclick="toggleHide()">👁 ซ่อนชื่อ/สังกัด</button>
+  <button class="toggle-btn" onclick="exportExcel()">⬇ Export Excel</button>
     <span class="stat-chip chip-total" id="stat-total">ทั้งหมด 0</span>
     <span class="stat-chip chip-pass" id="stat-pass">ผ่าน 0</span>
     <span class="stat-chip chip-fail" id="stat-fail">ไม่ผ่าน 0</span>
@@ -154,8 +155,46 @@ tbody td{padding:12px 14px;font-size:13px;vertical-align:top}
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxqVNUsUa_vpobc-xAm7UWaimlL9jNbEQibcxzjBAMU7k5ku2_1_T6fKi8ryXzosJbI/exec";
+
+function exportExcel() {
+  const rows = getFiltered();
+  if (!rows.length) { alert("ไม่มีข้อมูลที่จะ export"); return; }
+  const tab = currentTab === "oral" ? "Oral" : "Poster";
+  const data = rows.map((p, i) => ({
+    "#": i + 1,
+    "รหัส": p.id,
+    "ชื่อเรื่อง": p.title,
+    "คำนำหน้า": p.prefix,
+    "ชื่อ": p.fname,
+    "นามสกุล": p.lname,
+    "ตำแหน่ง": p.pos,
+    "ระดับ": p.level,
+    "สังกัด": p.org,
+    "Rev1": p.rev1Total ?? "",
+    "Rev2": p.rev2Total ?? "",
+    "Rev3": p.rev3Total ?? "",
+    "เฉลี่ย": p.avg ?? "",
+    "เกรด": p.grade ?? "",
+    "สถานะ": p.pass ?? "",
+    "ความเห็น Rev1": p.comment1 ?? "",
+    "ความเห็น Rev2": p.comment2 ?? "",
+    "ความเห็น Rev3": p.comment3 ?? "",
+  }));
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, tab);
+  ws["!cols"] = [
+    {wch:4},{wch:18},{wch:50},{wch:8},{wch:12},{wch:15},
+    {wch:20},{wch:12},{wch:30},{wch:6},{wch:6},{wch:6},
+    {wch:8},{wch:6},{wch:8},{wch:40},{wch:40},{wch:40}
+  ];
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}${String(now.getDate()).padStart(2,"0")}`;
+  XLSX.writeFile(wb, `NDPHC12_${tab}_${dateStr}.xlsx`);
+}
 
 let hideMode = false;
 function toggleHide() {
